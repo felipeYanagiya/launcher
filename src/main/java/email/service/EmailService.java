@@ -1,20 +1,22 @@
 package email.service;
 
-import java.util.Properties;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Locale;
 
-import javax.mail.Authenticator;
-import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 /**
  * @author felipey.
@@ -52,38 +54,44 @@ public class EmailService {
     private String smtpPort;
 
 
-    @RequestMapping("/email")
-    public void sendEmail(@RequestParam("address")String emailAddress) {
-        Properties props = new Properties();
-        props.put(EMAIL_SMTP_AUTH, smtpAuth);
-        props.put(EMAIL_SMTP_TTLS, smtpTtls);
-        props.put(EMAIL_SMTP_HOST, smtpHost);
-        props.put(EMAIL_SMTP_PORT, smtpPort);
+    @Autowired
+    private JavaMailSender mailSender;
 
-        Session session = Session.getInstance(props,
-                new Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(userName, password);
-                    }
-                });
+    @Autowired
+    private TemplateEngine templateEngine;
 
-        try {
+    @RequestMapping(value = "/email", method = RequestMethod.POST)
+    public void sendEmailToSubscriber(@RequestParam("recipientEmail") final String recipientEmail)
+            throws MessagingException {
 
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(fromAddress));
-            message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(emailAddress));
-            message.setSubject("Testing Subject");
-            message.setText("Dear Mail Crawler,"
-                    + "\n\n No spam to my email, please!");
+        sendSimpleMail(recipientEmail, Locale.ENGLISH);
+    }
 
-            Transport.send(message);
+    /*
+     * Send HTML mail (simple)
+     */
+    void sendSimpleMail(
+            final String recipientEmail, final Locale locale)
+            throws MessagingException {
 
-            System.out.println("Done");
+        // Prepare the evaluation context
+        final Context ctx = new Context(locale);
+        ctx.setVariable("subscriptionDate", new Date());
+        ctx.setVariable("hobbies", Arrays.asList("Cinema", "Sports", "Music"));
 
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
+        // Prepare message using a Spring helper
+        final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
+        final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
+        message.setSubject("Welcome to Our Subscription!");
+        message.setFrom("thymeleaf@example.com");
+        message.setTo(recipientEmail);
+
+        // Create the HTML body using Thymeleaf
+        final String htmlContent = this.templateEngine.process("email-simple.html", ctx);
+        message.setText(htmlContent, true /* isHtml */);
+
+        // Send email
+        this.mailSender.send(mimeMessage);
 
     }
 
