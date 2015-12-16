@@ -1,4 +1,4 @@
-package survey.service;
+package boot.survey.service;
 
 import java.util.List;
 
@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import survey.dto.Survey;
-import survey.dto.SurveyJson;
-import survey.repository.SurveyRepository;
+import boot.survey.dto.Survey;
+import boot.survey.dto.SurveyJson;
+import boot.survey.repository.SurveyRepository;
 
 /**
  * @author felipey.
@@ -31,7 +31,7 @@ public class SurveyService {
     }
 
     private void validateJson(SurveyJson json) {
-        Assert.notNull(json, "survey json should not be null!");
+        Assert.notNull(json, "boot.survey json should not be null!");
     }
 
     Survey getSurvey(SurveyJson json) {

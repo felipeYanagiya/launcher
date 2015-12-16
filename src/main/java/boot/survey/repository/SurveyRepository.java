@@ -1,8 +1,8 @@
-package survey.repository;
+package boot.survey.repository;
 
 import org.springframework.data.repository.CrudRepository;
 
-import survey.dto.Survey;
+import boot.survey.dto.Survey;
 
 /**
  * @author felipey.

@@ -1,4 +1,4 @@
-package home.facade;
+package boot.home.facade;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;

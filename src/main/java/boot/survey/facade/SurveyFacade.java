@@ -1,35 +1,40 @@
-package survey.facade;
+package boot.survey.facade;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
-import survey.dto.Survey;
-import survey.dto.SurveyJson;
-import survey.service.SurveyService;
+import boot.survey.dto.Survey;
+import boot.survey.dto.SurveyJson;
+import boot.survey.service.SurveyService;
 
 /**
  * @author felipey.
  */
-@Component
+@RestController
+@RequestMapping("/survey")
 public class SurveyFacade {
 
     @Autowired
     private SurveyService service;
 
-    @RequestMapping("/survey")
+    @RequestMapping(value = "", method = RequestMethod.POST)
     public void saveSurveyFromUser(@RequestBody(required = true) SurveyJson surveyJson) {
+        Assert.notNull(surveyJson, "json should not be null!");
 
+        service.saveSurvey(surveyJson);
     }
 
-    @RequestMapping("/get-survey")
+    @RequestMapping(value = "/get-survey", method = RequestMethod.GET)
     public List<SurveyJson> getAllSurveys() {
         List<Survey> surveyList = service.findAll();
 

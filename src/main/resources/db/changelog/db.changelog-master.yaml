@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: fyanagiya
+      changes:
+        - createTable:
+            tableName: survey
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: EXPECTATION
+                  type: varchar(255)
+              - column:
+                  name: PAY_FOR
+                  type: varchar(255)
+              - column:
+                  name: NEED
+                  type: varchar(255)

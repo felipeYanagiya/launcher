@@ -1,18 +1,20 @@
-package email.facade;
+package boot.email.facade;
 
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import email.service.EmailService;
+import boot.email.service.EmailService;
 
 /**
  * @author felipey.
  */
-@Component
+@RestController
+@EnableAutoConfiguration
 public class EmailFacade {
 
     @Autowired

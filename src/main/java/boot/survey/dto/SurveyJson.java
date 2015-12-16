@@ -1,4 +1,4 @@
-package survey.dto;
+package boot.survey.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

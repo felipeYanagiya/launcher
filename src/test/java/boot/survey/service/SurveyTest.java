@@ -1,4 +1,4 @@
-package survey.service;
+package boot.survey.service;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
@@ -17,9 +17,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
-import survey.dto.Survey;
-import survey.dto.SurveyJson;
-import survey.repository.SurveyRepository;
+import boot.survey.dto.Survey;
+import boot.survey.dto.SurveyJson;
+import boot.survey.repository.SurveyRepository;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SurveyTest {
